@@ -15,6 +15,7 @@ class MapstructdemoApplicationTests {
 	val personMapper: PersonMapper = Mappers.getMapper(PersonMapper::class.java)
 	val empMapper: EmployeeMapper = Mappers.getMapper(EmployeeMapper::class.java)
 	val userBodyMapper: UserBodyValuesMapper = Mappers.getMapper(UserBodyValuesMapper::class.java)
+	val customerMapper: CustomerMapper = Mappers.getMapper(CustomerMapper::class.java)
 
 	@Test
 	fun contextLoads() {
@@ -72,9 +73,46 @@ class MapstructdemoApplicationTests {
 		val imperialValues = UserBodyValuesImperial(10, 100)
 		val metricValues = userBodyMapper.userBodyValuesConverter(imperialValues)
 
-		assert(metricValues != null)
 		assert(metricValues.centimeter == 25.4)
 		assert(metricValues.kilogram == 45.35)
+	}
+
+	@Test
+	fun givenCustomerInfoToFormDeliveryAddress_whenMaps_thenCorrect() {
+		val customer = Customer("Jacob", "Lin")
+		val customerDto = customerMapper.from(customer)
+		val homeAddress = CustomerAddress("123 Street", "TW", "Taipei")
+		val deliveryAddress = customerMapper.toDeliveryAddress(customer, homeAddress)
+
+		assert(customerDto.forename == customer.firstName)
+		assert(customerDto.surname == customer.lastName)
+		assert(deliveryAddress.forename == customer.firstName)
+		assert(deliveryAddress.surname == customer.lastName)
+		assert(deliveryAddress.street == homeAddress.street)
+		assert(deliveryAddress.postalCode == homeAddress.postalCode)
+		assert(deliveryAddress.county == homeAddress.county)
+	}
+
+	@Test
+	fun givenNewAddressToUpdateDeliveryAddress_whenMaps_thenCorrect() {
+		val deliveryAddress = CustomerDeliveryAddress(
+			"Jacob",
+			"Lin",
+			"123 Street",
+			"TW",
+			"Taipei",
+		)
+		val newAddress = CustomerAddress(
+			"456 Street",
+			"USA",
+			"New York",
+		)
+		val updatedAddress = customerMapper.updateDeliveryAddress(deliveryAddress, newAddress)
+
+		assert(deliveryAddress == updatedAddress)
+		assert(deliveryAddress.street == updatedAddress.street)
+		assert(deliveryAddress.postalCode == updatedAddress.postalCode)
+		assert(deliveryAddress.county == updatedAddress.county)
 	}
 
 }
