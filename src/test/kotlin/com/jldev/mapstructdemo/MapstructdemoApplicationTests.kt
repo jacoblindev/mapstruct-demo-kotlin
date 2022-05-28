@@ -14,6 +14,7 @@ class MapstructdemoApplicationTests {
 	}
 	val personMapper: PersonMapper = Mappers.getMapper(PersonMapper::class.java)
 	val empMapper: EmployeeMapper = Mappers.getMapper(EmployeeMapper::class.java)
+	val userBodyMapper: UserBodyValuesMapper = Mappers.getMapper(UserBodyValuesMapper::class.java)
 
 	@Test
 	fun contextLoads() {
@@ -64,6 +65,16 @@ class MapstructdemoApplicationTests {
 		assert(dto.empDiv.id == model.division.id)
 		assert(dto.empDiv.name == model.division.name)
 		assert(format.parse(dto.empStartDate) == model.startDate)
+	}
+
+	@Test
+	fun givenUserBodyValuesWithImperialToMetric_whenMaps_thenCorrect() {
+		val imperialValues = UserBodyValuesImperial(10, 100)
+		val metricValues = userBodyMapper.userBodyValuesConverter(imperialValues)
+
+		assert(metricValues != null)
+		assert(metricValues.centimeter == 25.4)
+		assert(metricValues.kilogram == 45.35)
 	}
 
 }
