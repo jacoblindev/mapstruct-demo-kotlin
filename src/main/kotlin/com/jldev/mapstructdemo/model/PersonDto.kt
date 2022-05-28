@@ -8,4 +8,6 @@ data class PersonDto(
     val phoneNumber: String,
     val email: String,
     val birthDate: LocalDate,
-)
+    val id: String? = null,
+) {
+}

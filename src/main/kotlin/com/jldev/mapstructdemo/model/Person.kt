@@ -8,4 +8,6 @@ data class Person(
     val birthday: LocalDate,
     val email: String,
     val cellPhone: String,
-)
+    val id: String? = null,
+) {
+}

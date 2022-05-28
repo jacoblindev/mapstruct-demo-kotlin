@@ -38,6 +38,22 @@ class MapstructdemoApplicationTests {
 	}
 
 	@Test
+	fun givenPersonEntityToPersonWithExpression_whenMaps_thenCorrect() {
+		val person = Person(
+			"Jacob",
+			"Lin",
+			LocalDate.of(2000,1,1),
+			"jacoblindev@gmail.com",
+			"0912345678",
+		)
+		val personDto = personMapper.mapToDto(person)
+
+		assert(person.id == null)
+		assert(personDto.id != null)
+		assert(person.cellPhone == personDto.phoneNumber)
+	}
+
+	@Test
 	fun givenEmployeeDtoWithInfoToEmployee_whenMaps_thenCorrect() {
 		val dto = EmployeeDto(1, "Jacob", DivisionDto(1, "IT"), "01-06-2022")
 		val model = empMapper.mapToModel(dto)

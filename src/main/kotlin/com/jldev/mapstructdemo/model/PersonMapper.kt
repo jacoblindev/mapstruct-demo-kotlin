@@ -10,6 +10,7 @@ interface PersonMapper {
 
     @Mapping(source = "cellPhone", target = "phoneNumber")
     @Mapping(source = "birthday", target = "birthDate")
+    @Mapping(source = "id", target = "id", defaultExpression = "java(java.util.UUID.randomUUID().toString())")
     fun mapToDto(person: Person) : PersonDto
 
     @InheritInverseConfiguration
